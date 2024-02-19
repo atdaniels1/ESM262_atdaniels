@@ -1,0 +1,12 @@
+---
+title: "Assignment1a"
+author: "Ariel Daniels"
+date: "2024-02-14"
+output: html_document
+---
+
+# Purpose for taking class
+I would say that a main reason as to why I'm taking this course is that it is a prerequisite for ESM 232, which deals a lot with environmental modeling. My specialization in the MESM program is Environmental Law, and part of the requirement is choosing a few courses that would function as my "area of expertise". From my experience in undergrad, I took courses in both environmental science and urban planning. Ultimately, my goal is to get a position in government working as an environmental planner and modeling is a huge part of that field.
+
+# Experience in Data Science
+Overall, I would say I have a very intermediate skill level as it relates to data science. Much of it has been one-off experiences where I have taken a class that used Computer-aided drafting (CAD) software or MATLAB, but those courses were a while ago. As it stands, the most recent and frequent software I have used was ArcMAP (now ArcGIS Pro) and RStudio. In past experiences I have used ArcMAP working in local city government. I have yet to use R in anything, and I first came in contact with it from the MESM program. I am hoping to learn more about R and how to use Github.
