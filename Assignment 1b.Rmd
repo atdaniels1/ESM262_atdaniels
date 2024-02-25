@@ -1,0 +1,73 @@
+---
+title: "Assignment 1b"
+author: "Ariel Daniels & Shane O'Brian"
+date: "2024-02-20"
+output: html_document
+---
+
+# Program Contract
+__Input__: Raw air quality data from multiple sensors, including particulate matter (PM2.5 and PM10), nitrogen dioxide (NO2), sulfur dioxide (SO2), carbon monoxide (CO), ozone (O3), and metadata (sensor ID, location, timestamp).
+
+__Output__: An air quality report that includes current conditions, historical trends, alerts for areas with poor air quality, and recommendations for improvement.
+
+__Parameters__: Time range for analysis, geographical area of interest, specific pollutants to include, threshold levels for air quality alerts.
+
+# __Modules__
+
+```{r, eval=FALSE}
+* Data Collection Module
+
+Contract: Fetches raw data from various air quality sensors.
+Input: Sensor IDs, time range.
+Output: Raw air quality data and metadata.
+```
+
+```{r, eval=FALSE}
+* Data Cleaning Module
+
+Contract: Cleans and preprocesses the raw data for analysis.
+Input: Raw air quality data and metadata.
+Output: Cleaned and standardized data ready for analysis.
+```
+
+```{r, eval=FALSE}
+* Data Storage Module
+
+Contract: Stores cleaned data in a structured format.
+Input: Cleaned air quality data.
+Output: Confirmation of data storage.
+```
+
+```{r, eval=FALSE}
+* Analysis Module
+
+Contract: Performs statistical analysis and trend detection on the stored data.
+Input: Cleaned air quality data, parameters for analysis.
+Output: Analyzed data, including trends and statistical summaries.
+```
+
+```{r, eval=FALSE}
+* Alert Generation Module
+
+Contract: Generates alerts based on analysis results and predefined thresholds.
+Input: Analyzed data, threshold levels.
+Output: Alerts for areas with poor air quality.
+```
+
+```{r, eval=FALSE}
+* Report Generation Module
+
+Contract: Creates an air quality report from analyzed data and alerts.
+Input: Analyzed data, alerts, time range, geographical area.
+Output: An air quality report with current conditions, historical trends, and recommendations.
+```
+
+## Program Flow Diagram
+
+![Program Flow Diagram](https://raw.githubusercontent.com/ShaneOBrian/ESM_262_Examples/faaab602d105b66b29c3bb4595439e48fedb87f6/assignments/Program%20Flow%20Diagram%20.png "Program Flow Diagram")
+
+
+
+
+
+
