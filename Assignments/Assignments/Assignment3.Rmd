@@ -1,0 +1,134 @@
+---
+title: "Assignment 3"
+author: "Ariel Daniels"
+date: "2024-03-04"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(purrr)
+library(ggpubr)
+```
+
+#  Power required for different possible_cars 
+```{r sampling2, eval=TRUE, echo=TRUE}
+
+# Add a super light car and cars A,B,& C
+source("C:/Users/ariel/Documents/ESM 262/ESM262_Assignment1/ESM262_atdaniels/R/auto_power.R")
+# generate a structure to store info on our possible cars
+possible_cars = data.frame(name = c("Car A","Car B","Car C","Light Car"),mass=c(10000,65000,38000,5000), area = c(22,30,22,10))
+
+# first look at how results vary for mean speed say 80km/hr
+# do conversion
+speed_base = 80 * 0.28
+
+# because I have one mass and area for each car and only 1 speed
+# I can estimate power for each car type
+# add to the data structure
+possible_cars$power = power_gen_orig(V=speed_base, A = possible_cars$area, m=possible_cars$mass)
+
+head(possible_cars)
+
+# show results                         
+ggplot(possible_cars, aes(x=mass, y=power, fill=as.factor(name)))+geom_col()+labs(y="Power W", x="Mass (kg)", fill="Car type")
+```
+
+# Using pmap to calculate mean and maximum power for each car type
+```{r sampling2, eval=TRUE, echo=TRUE}
+possible_cars
+
+# the first part is the same as above
+# use sample to generate a distribution of speeds
+
+# assume a log normal distribution of speeds with mean 80km/hr
+# recall our function needs speed in m/s not km/hr so we will also do a conversion
+# lets get a sample of a 200 speeds- we could also do this by actually measuring speeds
+
+nsample = 200
+mean_speed = log(80*0.277)
+
+speeds = rlnorm(mean=mean_speed, sd=0.125*mean_speed, nsample)
+summary(speeds)
+
+plot(density(speeds), ylab="Distribution of Speeds in (m/s)")
+
+
+# how do we run each car for all speeds 
+# pmap runs a function for each value in a list of parameters, with other parameters set for each iteration
+
+
+powerall1 = pmap(list(A = possible_cars$area, m=possible_cars$mass), power_gen_orig, V=speeds)
+
+# lets turn to a data frame for easier graphing
+# we can add column names
+powerall1 = as.data.frame(powerall1, col.names=possible_cars$name)
+
+# apply family of functions does this to - FYI
+# what mapply does is run the function for each row in parameters listed, using values for other parameters listed in MoreArgs EACH time - a column for row in parameter list is returned
+powerall1a = mapply(FUN=power_gen_orig, A = possible_cars$area, m=possible_cars$mass, MoreArgs = list(V=speeds)  )
+# we can add column names
+colnames(powerall1a)=possible_cars$name
+
+head(powerall1a)
+head(powerall1)
+
+# Calculate mean
+pmap_mean <- powerall1 %>% map(mean)
+pmap_mean
+```
+
+# Plot pmap 
+```{r}
+# for plotting sometimes its useful to turn columns in to rows
+powerallr1 = powerall1 %>% pivot_longer(cols=everything(), names_to="car", values_to="power")
+head(powerallr1)
+
+# quick visualization
+
+method1_plot = ggplot(powerallr1, aes(car,power, fill=car))+geom_boxplot()+ggtitle("pmap")
+method1_plot
+
+```
+# Using for loop to Calculate mean and maximum power for each car type
+```{r}
+# how do we run each car for all speeds 
+# we use a for loop to cycle through
+# we need to create a data frame to store results - as above
+# one column for each car and one row for each speed
+
+powerall2 = as.data.frame(matrix(nrow=length(speeds), ncol=nrow(possible_cars)))
+# because we don't initialize it - values are NA
+head(powerall2)
+
+# how many cars area there
+nrow(possible_cars)
+# for loops use an index - in this case "i" but you could use anything - it repeats
+# anything between the {} for each values of i between 1 and nrow(possible_car) (which is 3 in our case)
+
+# index in to a matrix (like powerall3) is by row and column powerall3[2,5] is 2nd row and 5th column
+for (i in 1:nrow(possible_cars)) {
+  powerall2[,i] = power_gen_orig(A=possible_cars$area[i], m=possible_cars$mass[i], V=speeds)
+}
+
+# now it looks like above
+head(powerall2)
+# we can add column names
+colnames(powerall2)=possible_cars$name
+
+# Calculate mean
+for.loop <- powerall2 %>% map(mean)
+for.loop
+```
+# Plot for loop
+```{r}
+# for plotting sometimes its useful to turn columns in to rows
+powerallr2 = powerall2 %>% pivot_longer(cols=everything(), names_to="car", values_to="power")
+head(powerallr2)
+
+# quick visualization
+method2_plot = ggplot(powerallr2, aes(car,power, fill=car))+geom_boxplot()+ggtitle("For Loop")
+method2_plot
+```
+
