@@ -1,0 +1,59 @@
+---
+title: "Assignment 5"
+author: "Ariel Daniels"
+date: "2024-03-10"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(purrr)
+library(ggpubr)
+```
+
+# Manual Method
+
+```{r}
+
+Fish_species <- readLines(here::here("esm262_data", "fish.txt"))
+Fish_species <- gsub("\"", "", Fish_species) 
+# Display the first few fish names
+head(Fish_species)
+
+compute_diversity = function(Fish_species) {
+
+
+  # Create a table for the fish names
+  list_fish = table(Fish_species)
+
+  # which is the most frequent
+  Fish.Most_Common = names(which.max(list_fish))
+
+   # which is the most rare
+  Fish.Most_Rare = names(which.min(list_fish[list_fish != 1]))
+
+  # number of species
+  Fish.num_Total = length(Fish_species[Fish_species != "x"])
+
+
+
+  # output from function
+  return(list(mode=Fish.Most_Common, min=Fish.Most_Rare, num_Total= Fish.num_Total))
+}
+compute_diversity(Fish_species)
+
+```
+
+# Source .R file Method
+
+# Upload fish data
+```{r}
+source("C:/Users/ariel/Documents/ESM 262/ESM262_Assignment1/ESM262_atdaniels/R/compute_diversity.R")
+```
+
+# Print results
+```{r}
+results <- compute_diversity(Fish_species)
+print(results)
+```
